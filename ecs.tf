@@ -39,6 +39,9 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   # ECS-optimized Amazon Linux 2
   image_id             = "ami-0e74361b71c3bbc04"
 
+  # Access keys to SSH into the machines
+  key_name             = var.ssh_key_name
+  
   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
   security_groups      = [aws_security_group.travel_mate_server_task.id]
   user_data            = "#!/bin/bash\necho ECS_CLUSTER=travel-mate-${var.env_name} >> /etc/ecs/ecs.config"

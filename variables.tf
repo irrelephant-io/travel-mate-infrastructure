@@ -13,7 +13,7 @@ variable "env_region" {
 variable "availability_count" {
   description = "How many availability zones to use"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "server_instance_count" {

@@ -20,6 +20,14 @@
         {
           "name": "NODE_ENV",
           "value": "production"
+        },
+        {
+          "name": "SRV_HOST",
+          "value": "0.0.0.0"
+        },
+        {
+          "name": "SRV_PORT",
+          "value": "8079"
         }
     ]
   }
