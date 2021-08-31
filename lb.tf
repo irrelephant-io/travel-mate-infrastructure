@@ -10,6 +10,10 @@ resource "aws_lb_target_group" "travel_mate_server" {
   protocol      = "HTTP"
   vpc_id        = aws_vpc.default.id
   target_type   = "ip"
+
+  health_check {
+    path        = "/api/health"
+  }
 }
 
 resource "aws_lb_target_group" "travel_mate_client" {
@@ -25,22 +29,16 @@ resource "aws_lb_listener" "http" {
   port              = "80"
   protocol          = "HTTP"
 
+  # We auto-upgrade the HTTP connection to HTTPS
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.travel_mate_client.id
-  }
+    type            = "redirect"
 
-  
- # We auto-upgrade the HTTP connection to HTTPS
- # default_action {
- #   type            = "redirect"
- #
- #   redirect {
- #     port          = "443"
- #     protocol      = "HTTPS"
- #     status_code   = "HTTP_301"
- #   }
- # }
+    redirect {
+      port          = "443"
+      protocol      = "HTTPS"
+      status_code   = "HTTP_301"
+    }
+  }
 }
 
 resource "aws_lb_listener" "https" {
@@ -57,8 +55,8 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-resource "aws_lb_listener_rule" "api" {
-  listener_arn       = aws_lb_listener.http.arn
+resource "aws_lb_listener_rule" "https_api" {
+  listener_arn       = aws_lb_listener.https.arn
   priority           = 100
 
   action {
