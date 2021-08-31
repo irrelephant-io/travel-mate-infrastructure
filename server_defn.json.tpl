@@ -1,10 +1,19 @@
 [
   {
     "essential": true,
-    "memory": 256,
+    "memory": 444,
     "name": "travel-mate-server",
-    "cpu": 1,
+    "cpu": 1024,
     "image": "${repo_url}:latest",
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/travel-mate-server",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+    },
     "portMappings": [
         {
           "hostPort": 8080,

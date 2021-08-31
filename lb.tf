@@ -25,16 +25,22 @@ resource "aws_lb_listener" "http" {
   port              = "80"
   protocol          = "HTTP"
 
-  # We auto-upgrade the HTTP connection to HTTPS
   default_action {
-    type            = "redirect"
-
-    redirect {
-      port          = "443"
-      protocol      = "HTTPS"
-      status_code   = "HTTP_301"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.travel_mate_client.id
   }
+
+  
+ # We auto-upgrade the HTTP connection to HTTPS
+ # default_action {
+ #   type            = "redirect"
+ #
+ #   redirect {
+ #     port          = "443"
+ #     protocol      = "HTTPS"
+ #     status_code   = "HTTP_301"
+ #   }
+ # }
 }
 
 resource "aws_lb_listener" "https" {
@@ -52,7 +58,7 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener_rule" "api" {
-  listener_arn       = aws_lb_listener.https.arn
+  listener_arn       = aws_lb_listener.http.arn
   priority           = 100
 
   action {

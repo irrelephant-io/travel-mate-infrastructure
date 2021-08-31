@@ -43,7 +43,10 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   key_name             = var.ssh_key_name
   
   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
-  security_groups      = [aws_security_group.travel_mate_server_task.id]
+  security_groups      = [
+    aws_security_group.travel_mate_server_task.id,
+    aws_security_group.travel_mate_client_task.id
+  ]
   user_data            = "#!/bin/bash\necho ECS_CLUSTER=travel-mate-${var.env_name} >> /etc/ecs/ecs.config"
   instance_type        = "t3.micro"
 }
@@ -53,9 +56,9 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
   vpc_zone_identifier  = [element(aws_subnet.private.*.id, 0)]
   launch_configuration = aws_launch_configuration.ecs_launch_config.name
 
-  desired_capacity     = 2
+  desired_capacity     = 1
   min_size             = 1
-  max_size             = 10
+  max_size             = 1
   health_check_grace_period = 300
   health_check_type    = "EC2"
 }
