@@ -49,9 +49,8 @@ resource "aws_launch_configuration" "ecs_launch_config" {
 }
 
 resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
-  count                = var.availability_count
   name                 = "travel-mate-asg-${var.env_name}"
-  vpc_zone_identifier  = [element(aws_subnet.private.*.id, count.index)]
+  vpc_zone_identifier  = [element(aws_subnet.private.*.id, 0)]
   launch_configuration = aws_launch_configuration.ecs_launch_config.name
 
   desired_capacity     = 2
