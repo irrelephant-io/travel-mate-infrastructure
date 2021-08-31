@@ -33,6 +33,11 @@ variable "ssl_cert_arn" {
   type        = string
 }
 
+variable "ssh_key_name" {
+  description = "Name of the PEM key to access the instances"
+  type        = string
+}
+
 data "aws_availability_zones" "available" {
   state       = "available"
 }
